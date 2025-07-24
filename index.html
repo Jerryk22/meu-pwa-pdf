@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meu PWA PDF</title>
+<link rel="manifest" href="manifest.json" />
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  textarea { width: 100%; height: 200px; }
+  button { margin-top: 10px; padding: 10px 15px; font-size: 16px; }
+</style>
+</head>
+<body>
+
+<h1>Editor PDF offline</h1>
+<textarea id="texto" placeholder="Digite seu texto aqui..."></textarea><br/>
+<button id="gerarPdf">Gerar PDF</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  const { jsPDF } = window.jspdf;
+
+  document.getElementById('gerarPdf').addEventListener('click', () => {
+    const doc = new jsPDF();
+    const texto = document.getElementById('texto').value;
+    doc.text(texto, 10, 10);
+    doc.save('arquivo.pdf');
+  });
+
+  // Registrar service worker para cache offline
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker registrado'))
+      .catch(e => console.log('Falha ao registrar SW:', e));
+  }
+</script>
+
+</body>
+</html>
